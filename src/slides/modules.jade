@@ -1,0 +1,52 @@
+section
+    section
+        h3 Modules
+        ul
+            li.fragment Defines the syntax for modules, but how to load them has not been finalized
+            li.fragment Until then, a bundler (webpack, browserify, rollup, or babel) must be used to build the modules into a single script
+            li.fragment All imports and exports are declared statically to enable static analysis and asynchronous loading
+                ul
+                    li All imports and exports must be at the top level scope in the module
+                    li Imports must be declared as strings
+                    li One module per file
+            li.fragment Supports both named and default exports
+            li.fragment Each module is executed only once
+            li.fragment Cyclic dependencies are supported
+
+    section
+        h3 Exports
+        pre
+            code.
+                // export a default object
+                export default foo;
+
+                // named exports
+                export { foo, bar }
+
+                // named exports with a different name
+                export { foo as bar, bar as baz }
+
+                // re-exporting from a different module
+                export { foo } from './foo';
+
+    section
+        h3 Imports
+        pre
+            code.
+                // import for side effects
+                import 'jquery';
+
+                // import default object
+                import foo from './foo';
+
+                // import all named exports
+                import * as bar from './bar';
+
+                // import a single named export
+                import { baz } from './bar';
+
+                // rename an export
+                import { baz as myBaz } from './bar';
+
+                // import default and named exports
+                import defaultBar, { bar as foo, baz } from './bar';

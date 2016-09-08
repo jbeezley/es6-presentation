@@ -1,0 +1,22 @@
+section
+    h3 Object literals
+    pre
+        code.
+            var obj = {
+                // Shorthand for ‘handler: handler’
+                handler,
+
+                // Methods
+                toString() {
+                 // Super calls
+                 return "d " + super.toString();
+                },
+
+                // getters/setters
+                get name() {
+                 return this._name;
+                },
+
+                // Computed (dynamic) property names
+                [ 'prop_' + answer ]: 42
+            }; 

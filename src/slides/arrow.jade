@@ -1,0 +1,17 @@
+section
+    h3 Arrow functions
+    ul
+        li Compact function definition
+        li Always bound to "this" from defining scope
+
+    pre(style="margin-top: 30px")
+        code.
+            (a, b) => a + b
+
+            (a, b) => {
+                return a + b;
+            }
+
+            function (a, b) {
+                return a + b;
+            }.bind(this)

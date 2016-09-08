@@ -6,16 +6,33 @@
 */
 
 /*
+* In src/styl/reveal-themes have more themes !!
+*/
+@import "reveal-themes/simple"
+
+/*
 * Css file to create the generic presentation
 */
 @import "vendor/reveal"
 
 /*
-* In src/styl/reveal-themes have more themes !!
-*/
-@import "reveal-themes/blood"
-
-/*
 * In src/styl/highlight-themes have more awesome highlight-themes !!
 */
-@import "highlight-themes/atelier-cave-dark"
+@import "highlight-themes/github"
+
+h1,h2,h3,h4
+    margin-bottom 30px !important
+
+li
+    font-size 32px
+
+pre > code
+    max-height none !important
+
+.jb-left
+    width 48% !important
+    float left !important
+
+.jb-right
+    width 48% !important
+    float right !important

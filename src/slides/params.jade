@@ -1,0 +1,26 @@
+section
+    h3 Function parameters
+    pre
+        code.
+            // defaults
+            function f(x, y=12) {
+                return x + y;
+            }
+            f(1);  // -> 13
+
+            // rest
+            function f(x, ...y) {
+                return y
+            }
+            f(1, 2, 3);  // -> [2, 3]
+
+            // spread
+            function f(x, y, z) {
+                return x + y + z;
+            }
+            f(...[1, 2, 3]);  // -> 6
+
+            var a = [1];
+            a.push(...[2, 3]);  // a === [1, 2, 3]
+            var b = [...a, 4];  // b === [1, 2, 3, 4]
+

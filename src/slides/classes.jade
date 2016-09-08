@@ -1,0 +1,37 @@
+section
+    h3 Classes
+    pre.jb-left
+        code.
+            class Point {
+                constructor(x, y) {
+                    this.x = x;
+                    this.y = y;
+                }
+                get length() {
+                    return Point.distance(
+                        this, new Point(0, 0)
+                    );
+                }
+                static distance(a, b) {
+                    const dx = a.x - b.x;
+                    const dy = a.y - b.y;
+                    return Math.sqrt(
+                        dx*dx + dy*dy
+                    );
+                }
+            }
+
+    pre.jb-right
+        code.
+            class NamedPoint extends Point {
+                constructor(x, y, name) {
+                    this._name = name;
+                    super(x, y);
+                }
+                get name() {
+                    return this._name;
+                }
+                set name(name) {
+                    this._name = name;
+                }
+            }
