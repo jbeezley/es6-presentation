@@ -1,0 +1,27 @@
+section
+    h3 Promises
+    pre
+        code.
+            var p1 = new Promise((resolve, reject) => {
+                $('button.success-1').click(resolve);
+                $('button.error').click(reject);
+            }).then(() => console.log('Button 1 clicked!!!'));
+
+            var p2 = new Promise((resolve, reject) => {
+                $('button.success-2').click(resolve);
+                $('button.error').click(reject);
+            }).then(() => console.log('Button 2 clicked!!!'));
+
+            Promise.all([p1, p2])
+                .then(() => console.log('Both clicked!!!'))
+                .catch(() => console.log('Error clicked :('))
+
+            Promise.race([p1, p2])
+                .then(() => console.log('One button was clicked!!!'));
+
+            p1
+                .then(() => p2)
+                .then(() => {
+                    console.log('Button 1 clicked before 2');
+                });
+

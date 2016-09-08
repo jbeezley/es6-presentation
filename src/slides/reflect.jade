@@ -1,0 +1,37 @@
+section
+    section
+        h3 Reflection
+        pre
+            code.
+                // call a function -- f('a')
+                Reflect.apply(foo, ['a'])
+
+                // like Object.defineProperty, but returns boolean
+                Reflect.defineProperty({}, 'foo', {value: 1});
+
+                // functional interface for `delete obj['foo']`
+                Reflect.deleteProperty(obj, 'foo');
+
+                // functional interface for `obj[ ]`
+                Reflect.get(obj, 'foo');
+
+                // functional interface for `in`
+                Reflect.has(obj, 'foo');
+
+                // list non-inherited keys
+                Reflect.ownKeys(obj);
+
+    section
+        h3 Proxies
+        pre
+            code.
+                // All reflection methods can be proxied
+                var a = {};
+                var p = Proxy(a, {
+                    get(obj, name) {
+                        console.log(
+                            `Getting ${name}`
+                        );
+                        return Reflect(obj, name);
+                    }
+                });

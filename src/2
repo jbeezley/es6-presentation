@@ -1,0 +1,38 @@
+section
+    section
+        h3 Iterators (for/of)
+        pre
+            code.
+                let fibonacci = {
+                  [Symbol.iterator]() {
+                    let pre = 0, cur = 1;
+                    return {
+                      next() {
+                        [pre, cur] = [cur, pre + cur];
+                        let done = cur > 10;
+                        return { done, value: cur }
+                      }
+                    }
+                  }
+                }
+
+                Array.from(fibonacci);  // [1, 2, 3, 5, 8]
+                for (let n of fibonacci) {
+                  console.log(n);
+                }
+
+    section
+        h3 Generators
+        pre
+            code(data-noescape=true).
+                var fibonacci = {
+                  [Symbol.iterator]: <mark>function*</mark>() {
+                    var pre = 0, cur = 1;
+                    for (;cur < 10;) {
+                      var temp = pre;
+                      pre = cur;
+                      cur += temp;
+                      <mark>yield cur;</mark>
+                    }
+                  }
+                }

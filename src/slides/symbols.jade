@@ -1,0 +1,27 @@
+section
+    section
+        h3 Symbols
+        p Define unique objects that can be used as keys.
+        pre(style="margin-top: 30px")
+            code.
+                let a = Symbol(), b = Symbol();
+                let obj = {
+                    [a]: 1,
+                    [b]: 2,
+                    c: 3
+                };
+
+                obj[a];                            // 1
+                Object.keys(obj);                  // ['c']
+                Object.getOwnPropertySymbols(obj): // [a, b]
+
+    section
+        h3 Global symbol table
+        pre
+            code.
+                let a = Symbol.for('foo');
+                let b = Symbol.for('bar');
+                
+                a === b;                  // false
+                a === Symbol();           // false
+                a === Symbol.for('foo');  // true
