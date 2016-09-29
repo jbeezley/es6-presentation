@@ -27,11 +27,11 @@ section
             code.
                 // All reflection methods can be proxied
                 var a = {};
-                var p = Proxy(a, {
+                var p = new Proxy(a, {
                     get(obj, name) {
                         console.log(
                             `Getting ${name}`
                         );
-                        return Reflect(obj, name);
+                        return Reflect.get(obj, name);
                     }
                 });
