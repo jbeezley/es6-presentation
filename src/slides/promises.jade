@@ -1,27 +1,69 @@
 section
-    h3 Promises
-    pre
-        code.
-            var p1 = new Promise((resolve, reject) => {
-                $('button.success-1').click(resolve);
-                $('button.error').click(reject);
-            }).then(() => console.log('Button 1 clicked!!!'));
+    section
+        h3 Promises
+        ul
+            li Takes an argument that should be a function
+            li The function passed should have one or two callbacks
+                ol
+                    li resolve: called on success
+                    li reject: called on failure
+            li Any exception will automatically reject the promise
 
-            var p2 = new Promise((resolve, reject) => {
-                $('button.success-2').click(resolve);
-                $('button.error').click(reject);
-            }).then(() => console.log('Button 2 clicked!!!'));
 
-            Promise.all([p1, p2])
-                .then(() => console.log('Both clicked!!!'))
-                .catch(() => console.log('Error clicked :('))
+        pre
+            code.
+                var p1 = new Promise((resolve, reject) => {
 
-            Promise.race([p1, p2])
-                .then(() => console.log('One button was clicked!!!'));
+                    // on click call the resolve callback
+                    $('button.success-1').click(resolve);
 
-            p1
-                .then(() => p2)
-                .then(() => {
-                    console.log('Button 1 clicked before 2');
+                    // on click call the reject callback
+                    $('button.error').click(reject);
+
                 });
+                
+                p1.then(() => console.log('Button 1 clicked!!!'));
+
+    section
+        h3 Promise methods
+        pre
+            code.
+                Promise.all([p1, p2])
+                    .then(() => console.log('Both clicked!!!'))
+                    .catch(() => console.log('Error clicked :('))
+
+                Promise.race([p1, p2])
+                    .then(() => console.log('One button was clicked!!!'));
+
+                p1
+                    .then(() => p2)
+                    .then(() => {
+                        console.log('Button 1 clicked before 2');
+                    });
+
+    section
+        h3 async/await (not ES6, but coming soon)
+        ul
+            li Additional syntax to make promises easier
+            li Similar to what generators do for iterators
+            li Avoid unless you understand promises
+        pre
+            code.
+                // using promises
+                $.ajax('/data.json')
+                    .then((data) => parse(value).url)
+                    .then((url) => $.ajax(url))
+                    .catch(() => null);
+
+                // using async/await
+                async function handler() {
+                    try {
+                        let data = await $.ajax('/data.json');
+                        let url = parse(value).url;
+                        return await $.ajax(url);
+                    } catch {
+                        return null;
+                    }
+                }
+                handler();
 

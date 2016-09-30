@@ -1,22 +1,47 @@
 section
-    h3 Object literals
-    pre
-        code.
-            var obj = {
-                // Shorthand for ‘handler: handler’
-                handler,
+    section
+        h3 Object literal shorthand
+        pre
+            code.
+                var foo = 'value';
+                var obj = {
+                    foo
+                };
 
-                // Methods
-                toString() {
-                 // Super calls
-                 return "d " + super.toString();
-                },
+                obj.foo === 'value';
 
-                // getters/setters
-                get name() {
-                 return this._name;
-                },
 
-                // Computed (dynamic) property names
-                [ 'prop_' + answer ]: 42
-            }; 
+                var obj = {
+                    bar() { return 'value'; }
+                };
+
+                obj.bar() === 'value';
+
+    section
+        h3 Getters and setters
+        pre
+            code.
+                var obj = {
+                    get foo() {
+                        return this._foo;
+                    },
+                    set foo(value) {
+                        this._foo = value;
+                    }
+                };
+
+                obj.foo = 'bar';
+                obj.foo === 'bar'; // true
+
+    section
+        h3 Computed property names
+        pre
+            code.
+                var name = 'foo';
+                var obj = {
+                    [ name ]: 42,
+                    [ name + 'Bar' ]: 43
+                }; 
+
+                obj.foo === 42;
+                obj.fooBar === 43;
