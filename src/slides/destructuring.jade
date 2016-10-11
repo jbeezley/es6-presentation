@@ -16,7 +16,12 @@ section
             var [a = 1] = [];  // a === 1
 
             // function parameters
-            function f({name}) {
+            function f({name, shape, value}) {
                 return name;
             }
             f({name: 'Joe'});  // -> 'Joe'
+
+            function f(obj) {
+                var name = obj.name;
+            }
+

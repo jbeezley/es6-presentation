@@ -7,13 +7,22 @@ section
                 var obj = {
                     foo
                 };
+                obj = {
+                    foo: foo
+                };
+                obj = {
+                    'foo': foo
+                };
 
                 obj.foo === 'value';
 
 
                 var obj = {
-                    bar() { return 'value'; }
+                    bar(arg1, arg2) { return arg2; }
                 };
+                obj = {
+                    bar: function (arg1, arg2) { return arg2; }
+                }
 
                 obj.bar() === 'value';
 
@@ -42,6 +51,8 @@ section
                     [ name ]: 42,
                     [ name + 'Bar' ]: 43
                 }; 
+                obj[name] = 42;
+                obj[name + 'Bar'] = 43;
 
                 obj.foo === 42;
                 obj.fooBar === 43;

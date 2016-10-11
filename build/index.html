@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>ES6</title>
+    <meta name="author" content="Jonathan Beezley">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section>
+          <h3>Introduction to ES6</h3>
+          <h4>Jonathan Beezley</h4>
+          <h5>September 9, 2016</h5>
+        </section>
+        <section>
+          <h2>History of ECMAScript</h2>
+          <ul>
+            <li class="fragment">ES1 (1997) unified Netscape (JavaScript) and IE (JScript) implementations</li>
+            <li class="fragment">ES2 (1998) defined only minor updates</li>
+            <li class="fragment">ES3 (1999) added modern language constructs (RegExp, try/catch)</li>
+            <li class="fragment">ES4 (2008) contained major languages changes
+              <ul>
+                <li>Dropped at the last minute due to objections from Microsoft</li>
+                <li>Many proposals from ES4 were later added to ES6</li>
+              </ul>
+            </li>
+            <li class="fragment">ES5 (2009)
+              <ul>
+                <li>getters/setters, JSON</li>
+                <li>Backwards incompatible "strict" mode</li>
+              </ul>
+            </li>
+            <li class="fragment">ES6 (2016)</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Overview</h3>
+          <ul>
+            <li class="fragment">Fully supported* by all modern browsers</li>
+            <li class="fragment">Backward compatible with strict mode ES5</li>
+            <li class="fragment">Many new features</li>
+            <ul>
+              <li class="fragment">Syntactic sugar (arrow functions, spread, destructuring)</li>
+              <li class="fragment">New keywords and syntax (for/of, generators, let/const)</li>
+              <li class="fragment">New types (Promises, Symbol, Map, Set)</li>
+              <li class="fragment">Expanded metaprogramming (Reflect, Proxy)</li>
+              <li class="fragment">New methods on existing objects (Object.assign, Array.from)</li>
+              <li class="fragment">Subclassable builtins (Array, Date, Element)</li>
+              <li class="fragment">Module syntax</li>
+              <li class="fragment">tail call optimization, unicode RegExp, binary/octal literals, …</li>
+            </ul>
+          </ul>
+        </section>
+        <section>
+          <section>
+            <h3>Modules</h3>
+            <ul>
+              <li class="fragment">Defines the syntax for modules, but how to load them has not been finalized</li>
+              <li class="fragment">Until then, a bundler (webpack, browserify, rollup, or babel) must be used to build the modules into a single script</li>
+              <li class="fragment">All imports and exports are declared statically to enable static analysis and asynchronous loading
+                <ul>
+                  <li>All imports and exports must be at the top level scope in the module</li>
+                  <li>Imports must be declared as strings</li>
+                  <li>One module per file</li>
+                </ul>
+              </li>
+              <li class="fragment">Supports both named and default exports</li>
+              <li class="fragment">Each module is executed only once</li>
+              <li class="fragment">Cyclic dependencies are supported</li>
+            </ul>
+          </section>
+          <section>
+            <h3>Exports</h3>
+            <pre><code>// export a default object
+export default foo;
+
+// named exports
+export { foo, bar }
+
+// named exports with a different name
+export { foo as bar, bar as baz }
+
+// re-exporting from a different module
+export { foo } from './foo';
+</code></pre>
+          </section>
+          <section>
+            <h3>Imports</h3>
+            <pre><code>// import for side effects
+import 'jquery';
+
+// import default object
+import foo from './foo';
+
+// import all named exports
+import * as bar from './bar';
+
+// import a single named export
+import { baz } from './bar';
+
+// rename an export
+import { baz as myBaz } from './bar';
+
+// import default and named exports
+import defaultBar, { bar as foo, baz } from './bar';</code></pre>
+          </section>
+        </section>
+        <section>
+          <h3>Arrow functions</h3>
+          <ul>
+            <li>Compact function definition</li>
+            <li>Always bound to "this" from defining scope</li>
+          </ul>
+          <pre style="margin-top: 30px"><code>(a, b) => a + b
+
+(a, b) => {
+    return a + b;
+}
+
+function (a, b) {
+    return a + b;
+}.bind(this)</code></pre>
+        </section>
+        <section>
+          <section>
+            <h3>Object literal shorthand</h3>
+            <pre><code>var foo = 'value';
+var obj = {
+    foo
+};
+obj = {
+    foo: foo
+};
+obj = {
+    'foo': foo
+};
+
+obj.foo === 'value';
+
+
+var obj = {
+    bar(arg1, arg2) { return arg2; }
+};
+obj = {
+    bar: function (arg1, arg2) { return arg2; }
+}
+
+obj.bar() === 'value';
+</code></pre>
+          </section>
+          <section>
+            <h3>Getters and setters</h3>
+            <pre><code>var obj = {
+    get foo() {
+        return this._foo;
+    },
+    set foo(value) {
+        this._foo = value;
+    }
+};
+
+obj.foo = 'bar';
+obj.foo === 'bar'; // true
+</code></pre>
+          </section>
+          <section>
+            <h3>Computed property names</h3>
+            <pre><code>var name = 'foo';
+var obj = {
+    [ name ]: 42,
+    [ name + 'Bar' ]: 43
+}; 
+obj[name] = 42;
+obj[name + 'Bar'] = 43;
+
+obj.foo === 42;
+obj.fooBar === 43;</code></pre>
+          </section>
+        </section>
+        <section>
+          <h3>Classes</h3>
+          <pre class="jb-left"><code>class Point {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+    get length() {
+        return Point.distance(
+            this, new Point(0, 0)
+        );
+    }
+    static distance(a, b) {
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+        return Math.sqrt(
+            dx*dx + dy*dy
+        );
+    }
+}
+</code></pre>
+          <pre class="jb-right"><code>class NamedPoint extends Point {
+    constructor(x, y, name) {
+        this._name = name;
+        super(x, y);
+    }
+    get name() {
+        return this._name;
+    }
+    set name(name) {
+        this._name = name;
+    }
+}</code></pre>
+        </section>
+        <section>
+          <h3>Destructuring</h3>
+          <pre><code>// arrays
+var [a, , b] = [1, 2, 3];
+
+// objects
+var {a, b} = {a: 1, b: 3, c: 2};
+var {a: d} = {a: 1}  // d === 1
+
+// swap
+[a, b] = [b, a];
+
+// defaults
+var [a = 1] = [];  // a === 1
+
+// function parameters
+function f({name, shape, value}) {
+    return name;
+}
+f({name: 'Joe'});  // -> 'Joe'
+
+function f(obj) {
+    var name = obj.name;
+}</code></pre>
+        </section>
+        <section>
+          <h3>Function parameters</h3>
+          <pre><code>// defaults
+function f(x, y=12) {
+    return x + y;
+}
+f(1);  // -> 13
+
+// rest
+function f(x, ...y) {
+    return y
+}
+f(1, 2, 3);  // -> [2, 3]
+
+// spread
+function f(x, y, z) {
+    return x + y + z;
+}
+f(...[1, 2, 3]);  // -> 6
+
+var a = [1];
+a.push(...[2, 3]);  // a === [1, 2, 3]
+var b = [...a, 4];  // b === [1, 2, 3, 4]</code></pre>
+        </section>
+        <section>
+          <section>
+            <h3>Iterators (for/of)</h3>
+            <pre><code>let fibonacci = {
+  [Symbol.iterator]() {
+    let pre = 0, cur = 1;
+    return {
+      next() {
+        [pre, cur] = [cur, pre + cur];
+        let done = cur > 10;
+        return { done, value: cur }
+      }
+    }
+  }
+}
+
+Array.from(fibonacci);  // [1, 2, 3, 5, 8]
+for (let n of fibonacci) {
+  console.log(n);
+}
+</code></pre>
+          </section>
+          <section>
+            <h3>Generators</h3>
+            <pre><code data-noescape>var fibonacci = {
+  [Symbol.iterator]: <mark>function*</mark> () {
+    var pre = 0, cur = 1;
+    for (; cur < 10;) {
+      var temp = pre;
+      pre = cur;
+      cur += temp;
+      <mark>yield cur;</mark>
+    }
+  }
+}</code></pre>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h3>Symbols</h3>
+            <p>Define unique objects that can be used as keys.</p>
+            <pre style="margin-top: 30px"><code>let a = Symbol(), b = Symbol();
+let obj = {
+    [a]: 1,
+    [b]: 2,
+    c: 3
+};
+
+obj[a];                            // 1
+Object.keys(obj);                  // ['c']
+Object.getOwnPropertySymbols(obj): // [a, b]
+</code></pre>
+          </section>
+          <section>
+            <h3>Global symbol table</h3>
+            <pre><code>let a = Symbol.for('foo');
+let b = Symbol.for('bar');
+
+a === b;                  // false
+a === Symbol();           // false
+a === Symbol.for('foo');  // true</code></pre>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h3>Reflection</h3>
+            <pre><code>// call a function -- f('a')
+Reflect.apply(foo, ['a'])
+
+// like Object.defineProperty, but returns boolean
+Reflect.defineProperty({}, 'foo', {value: 1});
+
+// functional interface for `delete obj['foo']`
+Reflect.deleteProperty(obj, 'foo');
+
+// functional interface for `obj[ ]`
+Reflect.get(obj, 'foo');
+
+// functional interface for `in`
+Reflect.has(obj, 'foo');
+
+// list non-inherited keys
+Reflect.ownKeys(obj);
+</code></pre>
+          </section>
+          <section>
+            <h3>Proxies</h3>
+            <pre><code>// All reflection methods can be proxied
+var a = {};
+var p = new Proxy(a, {
+    get(obj, name) {
+        console.log(
+            `Getting ${name}`
+        );
+        return Reflect.get(obj, name);
+    }
+});</code></pre>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h3>Promises</h3>
+            <ul>
+              <li>Takes an argument that should be a function</li>
+              <li>The function passed should have one or two callbacks
+                <ol>
+                  <li>resolve: called on success</li>
+                  <li>reject: called on failure</li>
+                </ol>
+              </li>
+              <li>Any exception will automatically reject the promise</li>
+            </ul>
+            <pre><code>var p1 = new Promise((resolve, reject) => {
+
+    // on click call the resolve callback
+    $('button.success-1').click(resolve);
+
+    // on click call the reject callback
+    $('button.error').click(reject);
+
+});
+
+p1.then(() => console.log('Button 1 clicked!!!'));
+</code></pre>
+          </section>
+          <section>
+            <h3>Promise methods</h3>
+            <pre><code>Promise.all([p1, p2])
+    .then(() => console.log('Both clicked!!!'))
+    .catch(() => console.log('Error clicked :('))
+
+Promise.race([p1, p2])
+    .then(() => console.log('One button was clicked!!!'));
+
+p1
+    .then(() => p2)
+    .then(() => {
+        console.log('Button 1 clicked before 2');
+    });
+</code></pre>
+          </section>
+          <section>
+            <h3>async/await (not ES6, but coming soon)</h3>
+            <ul>
+              <li>Additional syntax to make promises easier</li>
+              <li>Similar to what generators do for iterators</li>
+              <li>Avoid unless you understand promises</li>
+            </ul>
+            <pre><code>// using promises
+$.ajax('/data.json')
+    .then((data) => parse(value).url)
+    .then((url) => $.ajax(url))
+    .catch(() => null);
+
+// using async/await
+async function handler() {
+    try {
+        let data = await $.ajax('/data.json');
+        let url = parse(value).url;
+        return await $.ajax(url);
+    } catch {
+        return null;
+    }
+}
+handler();</code></pre>
+          </section>
+        </section>
+      </div>
+    </div>
+    <script src="js/vendor/head.min.js"></script>
+    <script src="js/vendor/reveal.min.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
